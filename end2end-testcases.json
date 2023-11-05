@@ -1,0 +1,137 @@
+{
+  "Testcases_Examples": [
+    {
+      "name": "Testcase_Mountains_higher_than_8000_meters",
+      "input": "Mountains higher than 8000 meters",
+      "output": {
+        "lines" : [
+          "PREFIX wd: <http://www.wikidata.org/entity/>",
+          "PREFIX wdt: <http://www.wikidata.org/prop/direct/>",
+          "PREFIX p: <http://www.wikidata.org/prop/>",
+          "PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>",
+          "PREFIX wikibase: <http://wikiba.se/ontology#>",
+          "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>",
+          "SELECT ?mountain ?mountain_label",
+          "       (MAX(?elevation) AS ?max_elevation)",
+          "       (SAMPLE(?image) AS ?sample_image)",
+          "       (SAMPLE(?coordinates) AS ?sample_coordinates) WHERE {",
+          "  ?mountain wdt:P31 wd:Q8502 .",
+          "  ?mountain p:P2044/psn:P2044/wikibase:quantityAmount ?elevation .",
+          "  ?mountain wdt:P625 ?coordinates .",
+          "  ?mountain rdfs:label ?mountain_label .",
+          "  FILTER (LANG(?mountain_label) = \"en\")",
+          "  FILTER(?elevation >= 8000.0) .",
+          "  OPTIONAL { ?mountain wdt:P18 ?image }",
+          "}",
+          "GROUP BY ?mountain ?mountain_label",
+          "ORDER BY DESC(?max_elevation)"
+        ]
+      }
+    },
+    {
+      "name": "Testcase_People_and_their_professions",
+      "input": "People and their professions",
+      "output": {
+        "lines" : [
+          "PREFIX wd: <http://www.wikidata.org/entity/>",
+          "PREFIX wdt: <http://www.wikidata.org/prop/direct/>",
+          "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>",
+          "SELECT ?person_id ?person (COUNT(?profession_id) AS ?count) (GROUP_CONCAT(?profession; separator=", ") AS ?professions) WHERE {",
+          "  ?person_id wdt:P31 wd:Q5 .",
+          "  ?person_id wdt:P106 ?profession_id .",
+          "  ?profession_id rdfs:label ?profession .",
+          "  ?person_id rdfs:label ?person .",
+          "  FILTER (LANG(?person) = \"en\") .",
+          "  FILTER (LANG(?profession) = \"en\")",
+          "}",
+          "GROUP BY ?person_id ?person",
+          "ORDER BY DESC(?count)"
+        ]
+      }
+    }
+  ],
+  "Testcases_Hints": [
+    {
+      "name": "Testcase_Basic_1",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nAlbert Ein",
+      "output": {
+        "hints" : [
+          ["Q937", "Albert Einstein"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Basic_2",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nUniversity of Frei",
+      "output": {
+        "hints" : [
+          ["Q153987", "University of Freiburg"],
+          ["Q415755", "University of Freiburg"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Basic_3",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nUnited sta",
+      "output": {
+        "hints" : [
+          ["Q30", "United States of America"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Large_1",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\ncombustion",
+      "output": {
+        "hints" : [
+          ["Q133235", "combustion"],
+          ["Q193470", "gas turbine"],
+          ["Q468455", "death by burning"],
+          ["Q909434", "combustion chamber"],
+          ["Q941667", "fire point"],
+          ["Q910479", "fire triangle"],
+          ["Q6018565", "combustion engine"],
+          ["Q158568", "methylcyclopentadienyl manganese tricarbonyl"],
+          ["Q15215566", "Combustion"],
+          ["Q11134111", "Combustion engine"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Large_2",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nship",
+      "output": {
+        "hints" : [
+          ["Q11446", "ship"],
+          ["Q160649", "typhus"],
+          ["Q155930", "maritime transport"],
+          ["Q187956", "intermodal container"],
+          ["Q190928", "shipyard"],
+          ["Q474200", "shipbuilding"],
+          ["Q207452", "ship of the line"],
+          ["Q906512", "shipwrecking"],
+          ["Q1050837", "Ship of Theseus"],
+          ["Q475604", "maritime pilot"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Large_3",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nenergy",
+      "output": {
+        "hints" : [
+          ["Q11379", "energy"],
+          ["Q11382", "conservation of energy"],
+          ["Q215754", "energy drink"],
+          ["Q202742", "qi"],
+          ["Q622756", "electricity meter"],
+          ["Q380170", "energy conservation"],
+          ["Q669532", "energy level"],
+          ["Q192704", "energy efficiency"],
+          ["Q217810", "United States Department of Energy"],
+          ["Q948022", "ecological pyramid"]
+        ]
+      }
+    }
+  ]
+}
