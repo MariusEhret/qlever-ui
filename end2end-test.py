@@ -7,11 +7,8 @@ Author: Hannah Bast <bast@cs.uni-freiburg.de>
 import json
 import time
 import re
-import os
 
 from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
-# from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -155,7 +152,9 @@ class QleverUiTester:
         for i in range(10):
             # wait until there are hints not starting with ? and then return them
             # alternative: get all network requests and wait till all have a responseEnd (are answered)
-            #network_requests = self.driver.execute_script("var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;")
+            # network_requests = self.driver.execute_script("var performance = window.performance ||
+            # window.mozPerformance || window.msPerformance || window.webkitPerformance ||
+            # {}; var network = performance.getEntries() || {}; return network;")
 
             time.sleep(0.5)
             try:
@@ -176,8 +175,10 @@ class QleverUiTester:
         """
         Running through different ui tests
         """
+        log.info("Beginning End-To-End testing")
         self.test_examples()
         self.test_hints()
+        log.info("All Test Cases are finished.")
 
     def test_examples(self):
         """
@@ -208,9 +209,11 @@ class QleverUiTester:
                 continue
             example.click()
 
-            text = self.driver.find_element(By.XPATH, "/html/body/div[1]/div[5]/div/div[1]/div/div[6]/div[1]/div/div/div/div[5]")
+            text = self.driver.find_element(By.XPATH,
+                                            "/html/body/div[1]/div[5]/div/div[1]/div/div[6]/div[1]/div/div/div/div[5]")
             lines = text.find_elements(By.XPATH, "//span[@role]")
             expected_output = test_case.get('output').get('lines')
+
             for i in range(len(expected_output)):
                 if lines[i].text != expected_output[i]:
                     log.warning('Test Case %s (line %s/%s): displayed\n"%s"\ninstead of\n"%s"' %
@@ -257,8 +260,6 @@ class QleverUiTester:
                 log.warning('Test Case %s: %s tests failed' % (test_case.get('name'), len(hints_not_found)))
             else:
                 log.info('Test Case %s: completed successfully' % test_case.get('name'))
-
-        log.info("All Test Cases are finished.")
 
 
 class MyArgumentParser(argparse.ArgumentParser):

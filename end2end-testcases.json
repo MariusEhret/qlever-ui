@@ -1,30 +1,21 @@
 {
   "Testcases_Examples": [
     {
-      "name": "Testcase_Mountains_higher_than_8000_meters",
-      "input": "Mountains higher than 8000 meters",
+      "name": "Testcase_German_cities_with_their_German_name",
+      "input": "German cities with their German name",
       "output": {
         "lines" : [
           "PREFIX wd: <http://www.wikidata.org/entity/>",
           "PREFIX wdt: <http://www.wikidata.org/prop/direct/>",
-          "PREFIX p: <http://www.wikidata.org/prop/>",
-          "PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>",
-          "PREFIX wikibase: <http://wikiba.se/ontology#>",
           "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>",
-          "SELECT ?mountain ?mountain_label",
-          "       (MAX(?elevation) AS ?max_elevation)",
-          "       (SAMPLE(?image) AS ?sample_image)",
-          "       (SAMPLE(?coordinates) AS ?sample_coordinates) WHERE {",
-          "  ?mountain wdt:P31 wd:Q8502 .",
-          "  ?mountain p:P2044/psn:P2044/wikibase:quantityAmount ?elevation .",
-          "  ?mountain wdt:P625 ?coordinates .",
-          "  ?mountain rdfs:label ?mountain_label .",
-          "  FILTER (LANG(?mountain_label) = \"en\")",
-          "  FILTER(?elevation >= 8000.0) .",
-          "  OPTIONAL { ?mountain wdt:P18 ?image }",
+          "SELECT DISTINCT ?name ?population WHERE {",
+          "  ?city wdt:P31/wdt:P279* wd:Q515 .",
+          "  ?city wdt:P17 wd:Q183 .",
+          "  ?city wdt:P1082 ?population .",
+          "  ?city rdfs:label ?name .",
+          "  FILTER (LANG(?name) = \"de\")",
           "}",
-          "GROUP BY ?mountain ?mountain_label",
-          "ORDER BY DESC(?max_elevation)"
+          "ORDER BY DESC(?population)"
         ]
       }
     },
@@ -36,7 +27,7 @@
           "PREFIX wd: <http://www.wikidata.org/entity/>",
           "PREFIX wdt: <http://www.wikidata.org/prop/direct/>",
           "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>",
-          "SELECT ?person_id ?person (COUNT(?profession_id) AS ?count) (GROUP_CONCAT(?profession; separator=", ") AS ?professions) WHERE {",
+          "SELECT ?person_id ?person (COUNT(?profession_id) AS ?count) (GROUP_CONCAT(?profession; separator=\", \") AS ?professions) WHERE {",
           "  ?person_id wdt:P31 wd:Q5 .",
           "  ?person_id wdt:P106 ?profession_id .",
           "  ?profession_id rdfs:label ?profession .",
@@ -46,6 +37,29 @@
           "}",
           "GROUP BY ?person_id ?person",
           "ORDER BY DESC(?count)"
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Persons_and_birthdate_precision_9",
+      "input": "Persons and their birthdate if it has precision \"9\"",
+      "output": {
+        "lines" : [
+          "PREFIX wd: <http://www.wikidata.org/entity/>",
+          "PREFIX wdt: <http://www.wikidata.org/prop/direct/>",
+          "PREFIX wds: <http://www.wikidata.org/entity/statement/>",
+          "PREFIX psv: <http://www.wikidata.org/prop/statement/value/>",
+          "PREFIX p: <http://www.wikidata.org/prop/>",
+          "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>",
+          "PREFIX wikibase: <http://wikiba.se/ontology#>",
+          "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>",
+          "SELECT ?person_id ?date_of_birth_statement ?date_of_birth_value ?date_of_birth",
+          "WHERE {",
+          "  ?person_id p:P569 ?date_of_birth_statement .",
+          "  ?date_of_birth_statement psv:P569 ?date_of_birth_value .",
+          "  ?date_of_birth_value wikibase:timePrecision \"9\"^^xsd:integer .",
+          "  ?date_of_birth_value wikibase:timeValue ?date_of_birth",
+          "}"
         ]
       }
     }
