@@ -66,7 +66,7 @@
   ],
   "Testcases_Hints": [
     {
-      "name": "Testcase_Basic_1",
+      "name": "Testcase_Subject_Basic_1",
       "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nAlbert Ein",
       "output": {
         "hints" : [
@@ -75,7 +75,7 @@
       }
     },
     {
-      "name": "Testcase_Basic_2",
+      "name": "Testcase_Subject_Basic_2",
       "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nUniversity of Frei",
       "output": {
         "hints" : [
@@ -85,7 +85,7 @@
       }
     },
     {
-      "name": "Testcase_Basic_3",
+      "name": "Testcase_Subject_Basic_3",
       "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nUnited sta",
       "output": {
         "hints" : [
@@ -94,7 +94,88 @@
       }
     },
     {
-      "name": "Testcase_Large_1",
+      "name": "Testcase_Predicate_Basic_1",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nwd:Q937 born in",
+      "output": {
+        "hints" : [
+          ["P19", "place of birth"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Predicate_Basic_2",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nwd:Q153987 instance",
+      "output": {
+        "hints" : [
+          ["P31", "instance of"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Predicate_Basic_3",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nwd:Q30 government head",
+      "output": {
+        "hints" : [
+          ["P6", "head of government"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Object_Basic_1",
+      "input": "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\n?test wdt:P19 Lon",
+      "output": {
+        "hints" : [
+          ["Q84", "London"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Object_Basic_2",
+      "input": "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\n?test wdt:P31 hum",
+      "output": {
+        "hints" : [
+          ["Q5", "human"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Object_Basic_3",
+      "input": "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\n?test wdt:P106 ac",
+      "output": {
+        "hints" : [
+          ["Q33999", "actor"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Values_Single",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT * WHERE ?test {\n  VALUES ?test { Germa",
+      "output": {
+        "hints" : [
+          ["Q183", "Germany"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Values_Multiple",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT * WHERE ?test, ?test2 {\n  VALUES (?test ?test2) { Skatebo",
+      "output": {
+        "hints" : [
+          ["Q15783", "skateboard"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Values_Previously_Used",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT * WHERE ?test {\n  VALUES ?test { Germa",
+      "output": {
+        "hints" : [
+          ["Q183", "Germany"]
+        ]
+      }
+    },
+    {
+      "name": "Testcase_Subject_Large_1",
       "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\ncombustion",
       "output": {
         "hints" : [
@@ -112,7 +193,7 @@
       }
     },
     {
-      "name": "Testcase_Large_2",
+      "name": "Testcase_Subject_Large_2",
       "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nship",
       "output": {
         "hints" : [
@@ -130,7 +211,7 @@
       }
     },
     {
-      "name": "Testcase_Large_3",
+      "name": "Testcase_Subject_Large_3",
       "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT ?test WHERE {\nenergy",
       "output": {
         "hints" : [

@@ -29,7 +29,7 @@ class Hint:
         database_type, database_id = None, None
         name_language_pairs = []
 
-        parts = text.split('/')
+        parts = text.split('/n')
         for part in parts:
             elements = re.split(r'["@]+', part.strip())
             if not database_type:
@@ -164,7 +164,6 @@ class QleverUiTester:
                 continue
 
             hints = hint_window.find_elements(By.CLASS_NAME, "CodeMirror-hint")
-
             for hint in hints:
                 if hint.text[0] != "?":
                     return hints
@@ -221,8 +220,7 @@ class QleverUiTester:
                     log.warning('Test Case %s failed' % test_case.get('name'))
                     break
             else:
-                log.info('Test Case %s finished successfully')
-
+                log.info('Test Case %s completed successfully' % test_case.get('name'))
 
     def test_hints(self):
         """
@@ -231,35 +229,39 @@ class QleverUiTester:
         for test_case in self.test_cases_hints:
             log.info("----------")
             log.info("Starting with Hint Test %s" % test_case.get('name'))
-            self.init_page()
-            self.send_to_textfield(test_case.get('input'))
-            unprocessed_hints = self.get_hints()
+            try:
+                self.init_page()
+                self.send_to_textfield(test_case.get('input'))
+                unprocessed_hints = self.get_hints()
 
-            hints = [Hint(unprocessed_hint.text) for unprocessed_hint in unprocessed_hints]
-            expected_hints = test_case.get('output').get('hints')
-            hints_found = []
-            hints_not_found = []
+                hints = [Hint(unprocessed_hint.text) for unprocessed_hint in unprocessed_hints]
+                expected_hints = test_case.get('output').get('hints')
+                hints_found = []
+                hints_not_found = []
 
-            #for hint in hints:
-            #    print('["%s", "%s"],' % (hint.database_id, hint.primary_name))
+                #for hint in hints:
+                #    print('["%s", "%s"],' % (hint.database_id, hint.primary_name))
 
-            for i in range(len(expected_hints)):
-                if hints[i].database_id in expected_hints[i]:
-                    hints_found.append(hints[i])
-                    log.info('Test Case %s (%s/%s): Hint %s "%s" displayed correctly' %
-                             (test_case.get('name'), i + 1, len(expected_hints),
-                              hints[i].database_id, hints[i].primary_name))
-                else:
-                    hints_not_found.append(hints[i])
-                    log.warning('Test Case %s (%s/%s): Hint %s "%s" displayed instead of %s "%s"' %
-                                (test_case.get('name'), i + 1, len(expected_hints),
-                                 hints[i].database_id, hints[i].primary_name,
-                                 expected_hints[i][0], expected_hints[i][1]))
+                for i in range(len(expected_hints)):
+                    if hints[i].database_id in expected_hints[i] and hints[i].primary_name in expected_hints[i]:
+                        hints_found.append(hints[i])
+                        log.info('Test Case %s (%s/%s): Hint %s "%s" displayed correctly' %
+                                 (test_case.get('name'), i + 1, len(expected_hints),
+                                  hints[i].database_id, hints[i].primary_name))
+                    else:
+                        hints_not_found.append(hints[i])
+                        log.warning('Test Case %s (%s/%s): Hint %s "%s" displayed instead of %s "%s"' %
+                                    (test_case.get('name'), i + 1, len(expected_hints),
+                                     hints[i].database_id, hints[i].primary_name,
+                                     expected_hints[i][0], expected_hints[i][1]))
+            except Exception as e:
+                log.error("Test Case %s failed with error: %s" % (test_case.get('name'), str(e)))
+                continue
 
             if hints_not_found:
                 log.warning('Test Case %s: %s tests failed' % (test_case.get('name'), len(hints_not_found)))
             else:
-                log.info('Test Case %s: completed successfully' % test_case.get('name'))
+                log.info('Test Case %s completed successfully' % test_case.get('name'))
 
 
 class MyArgumentParser(argparse.ArgumentParser):
