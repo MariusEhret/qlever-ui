@@ -20,6 +20,9 @@ import sys
 
 
 class Hint:
+    """
+    Class for parsing the Autocompletion Hints.
+    """
     def __init__(self, text):
         self.fulltext = text
         self.database_type, self.database_id, self.name_language_pairs = self.parse(text)
@@ -109,7 +112,6 @@ class QleverUiTester:
         """
         Close the browser window if it's still there.
         """
-        input()
         log.info("Shutting down...")
         try:
             self.driver.close()
@@ -117,6 +119,9 @@ class QleverUiTester:
             pass
 
     def init_test_cases(self, test_case_path):
+        """
+        Load the test cases from the given file.
+        """
         try:
             with open(test_case_path, 'r') as file:
                 data = json.load(file)
@@ -126,6 +131,9 @@ class QleverUiTester:
             log.error("Could not initialize test cases.")
 
     def init_page(self):
+        """
+        Try to open the page and wait until it's loaded.
+        """
         for i in range(self.num_retries):
             try:
                 self.driver.get(self.url)
@@ -145,12 +153,17 @@ class QleverUiTester:
                     sys.exit(1)
 
     def send_to_textfield(self, text):
+        """
+        Input the given text into the textfield.
+        """
         textfield = self.driver.find_element(By.XPATH, "/html/body/div[1]/div[5]/div/div[1]/div/div[1]/textarea")
         textfield.send_keys(text)
 
     def get_hints(self):
+        """
+        Locate the hint window, wait until there are autocompletion hints and return them.
+        """
         for i in range(10):
-            # wait until there are hints not starting with ? and then return them
             # alternative: get all network requests and wait till all have a responseEnd (are answered)
             # network_requests = self.driver.execute_script("var performance = window.performance ||
             # window.mozPerformance || window.msPerformance || window.webkitPerformance ||
@@ -172,7 +185,7 @@ class QleverUiTester:
 
     def test(self):
         """
-        Running through different ui tests
+        Run through the different ui tests
         """
         log.info("Beginning End-To-End testing")
         self.test_examples()
@@ -181,7 +194,7 @@ class QleverUiTester:
 
     def test_examples(self):
         """
-        Testing the "Examples" function
+        Testing the "Examples" button, running through all testcases in self.test_cases_examples.
         """
         for test_case in self.test_cases_examples:
             log.info("----------")
@@ -224,7 +237,7 @@ class QleverUiTester:
 
     def test_hints(self):
         """
-        Running through different hint tests.
+        Testing the autocompletion hints, running through all testcases in self.test_cases_hints.
         """
         for test_case in self.test_cases_hints:
             log.info("----------")

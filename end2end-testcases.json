@@ -167,10 +167,10 @@
     },
     {
       "name": "Testcase_Values_Previously_Used",
-      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT * WHERE ?test {\n  VALUES ?test { Germa",
+      "input": "PREFIX wd: <http://www.wikidata.org/entity/>\nSELECT * WHERE ?test {\n  VALUES ?test { wd:Q11 } .\n  Einstei",
       "output": {
         "hints" : [
-          ["Q183", "Germany"]
+          ["Q937", "Albert Einstein"]
         ]
       }
     },
